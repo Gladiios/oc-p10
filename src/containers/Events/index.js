@@ -13,11 +13,14 @@ const EventList = () => {
   const { data, error } = useData();
   const [type, setType] = useState();
   const [currentPage, setCurrentPage] = useState(1);
+
+  // Filtrer les événements en fonction du type sélectionné et de la pagination
   const filteredEvents = (
-    (!type
-      ? data?.events
-      : data?.events) || []
+    // Si un type est sélectionné, filtrer les événements selon ce type
+    // Sinon, prendre tous les événements
+    (!type ? data?.events : data?.events.filter(event => event.type === type)) || []
   ).filter((event, index) => {
+    // Filtrer également les événements selon la pagination
     if (
       (currentPage - 1) * PER_PAGE <= index &&
       PER_PAGE * currentPage > index
@@ -26,8 +29,12 @@ const EventList = () => {
     }
     return false;
   });
+
   const changeType = (evtType) => {
+    // Réinitialiser la pagination à la première page chaque fois que le type change
     setCurrentPage(1);
+
+    // Mettre à jour l'état local avec le type d'événement sélectionné
     setType(evtType);
   };
   const pageNumber = Math.floor((filteredEvents?.length || 0) / PER_PAGE) + 1;
