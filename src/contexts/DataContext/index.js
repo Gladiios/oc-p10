@@ -27,9 +27,9 @@ export const DataProvider = ({ children }) => {
   // Ajouté pour surveiller les changements de 'data' et définir 'last' en conséquence
   useEffect(() => {
     if (data && data.events) {
-      // Triez les événements par date dans l'ordre décroissant
+      // Trie les événements par date dans l'ordre décroissant
       const sortedEvents = data.events.sort((a, b) => new Date(b.date) - new Date(a.date));
-      // Définissez l'événement le plus récent
+      // Défini l'événement le plus récent
       setLast(sortedEvents[0]);
     }
   }, [data]);
@@ -47,7 +47,7 @@ export const DataProvider = ({ children }) => {
     getData();
   });
 
-  // Utilisé useMemo pour garantir que la valeur fournie à DataContext.Provider ne change pas à chaque rendu
+  // useMemo garanti que la valeur fournie à DataContext.Provider ne change pas à chaque rendu
   const providerValue = useMemo(() => ({
     data, error, last
   }), [data, error, last]);

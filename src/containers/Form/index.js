@@ -16,6 +16,7 @@ const Form = ({ onSuccess, onError }) => {
       try {
         await mockContactApi();
         setSending(false);
+        // Ajout de on succes qui si est déclenché, ouvre la modale pour confirmer que le message a bien été envoyer
         onSuccess();
       } catch (err) {
         setSending(false);

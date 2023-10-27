@@ -6,24 +6,24 @@ import "./style.scss";
 
 const Slider = () => {
   const { data } = useData();
-  const [index, setIndex] = useState(0);  // État pour suivre l'index de la diapositive actuelle
+  const [index, setIndex] = useState(0);  // État pour suivre l'index de la slide actuel
   
   // Triez les données par date dans l'ordre décroissant
   const byDateDesc = data?.focus.sort((evtA, evtB) =>
     new Date(evtA.date) < new Date(evtB.date) ? -1 : 1
   );
 
-  // Cet effet met en place un intervalle pour changer automatiquement la diapositive toutes les 2 secondes
+  // Intervalle de 5 secondes pour changer l'image automatiquement
   useEffect(() => {
     const interval = setInterval(() => {
       setIndex(prevIndex => (prevIndex < byDateDesc.length - 1 ? prevIndex + 1 : 0));
     }, 5000);
     
-    // Nettoyage : Efface l'intervalle lorsque le composant est démonté ou lorsque byDateDesc change
+    // Remet à zero l'interval au changement d'image qu'il soit automatique ou manuel
     return () => clearInterval(interval);  
   }, [byDateDesc]);
 
-  // Fonction de gestion pour changer la diapositive lorsqu'un bouton radio est cliqué
+  // change de slide lorsqu'un bouton radio est cliqué
   const handleRadioChange = (radioIdx) => {
     setIndex(radioIdx);
   };
