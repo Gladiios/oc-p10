@@ -15,20 +15,19 @@ const EventList = () => {
   const [currentPage, setCurrentPage] = useState(1);
 
   // Filtre en fonction du type selectionné
-  const filteredEvents = (
-    // Si un type est selectionné, filtre selon celui ci
-    (!type ? data?.events : data?.events.filter(event => event.type === type)) || []
-  ).filter((event, index) => {
-    // Filtre les events selon la pagination, verifie si l'index se situe entre les deux valeurs
-    // Pour decider si il doit être inclus dans filteredEvents
-    if (
-      (currentPage - 1) * PER_PAGE <= index &&
-      PER_PAGE * currentPage > index
-    ) {
-      return true;
+  let filteredEvents = [];
+
+  if (data?.events) {
+    if (type) {
+      filteredEvents = data.events.filter(event => event.type === type);
+    } else {
+      filteredEvents = data.events;
     }
-    return false;
-  });
+  }
+  
+  filteredEvents = filteredEvents.filter((event, index) => 
+    (currentPage - 1) * PER_PAGE <= index && PER_PAGE * currentPage > index
+  );
 
   const changeType = (evtType) => {
     // Réinitialiser la pagination chaque fois que le type change
@@ -53,6 +52,7 @@ const EventList = () => {
           />
           <div id="events" className="ListContainer">
             {filteredEvents.map((event) => (
+              event && (
               <Modal key={event.id} Content={<ModalEvent event={event} />}>
                 {({ setIsOpened }) => (
                   <EventCard
@@ -64,6 +64,7 @@ const EventList = () => {
                   />
                 )}
               </Modal>
+              )
             ))}
           </div>
           <div className="Pagination">
