@@ -10,13 +10,12 @@ import "./style.css";
 const PER_PAGE = 9;
 
 const EventList = () => {
-  const { data, error } = useData();
-  const [type, setType] = useState();
-  const [currentPage, setCurrentPage] = useState(1);
+  const { data, error } = useData(); // Récupération des données et des erreurs éventuelles
+  const [type, setType] = useState(); // État pour la catégorie sélectionnée
+  const [currentPage, setCurrentPage] = useState(1); // État pour la page actuelle
 
+  let filteredEvents = []; // Initialisation du tableau d'événements filtrés
   // Filtre en fonction du type selectionné
-  let filteredEvents = [];
-
   if (data?.events) {
     if (type) {
       filteredEvents = data.events.filter((event) => event.type === type);
@@ -24,20 +23,20 @@ const EventList = () => {
       filteredEvents = data.events;
     }
   }
-
+  // Pagination des événements filtrés
   filteredEvents = filteredEvents.filter(
     (event, index) =>
       (currentPage - 1) * PER_PAGE <= index && PER_PAGE * currentPage > index
   );
 
+  // Fonction pour changer le type de catégorie et réinitialiser la page
   const changeType = (evtType) => {
-    // Réinitialiser la pagination chaque fois que le type change
     setCurrentPage(1);
-
-    // Met a jour l'état local avec le type d'événts selectionné
     setType(evtType);
   };
+
   const pageNumber = Math.floor((filteredEvents?.length || 0) / PER_PAGE) + 1;
+  // Création d'un ensemble de types pour le menu déroulant
   const typeList = new Set(data?.events.map((event) => event.type));
   return (
     <>
